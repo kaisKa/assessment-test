@@ -23,7 +23,7 @@ public class User {
     private Integer id;
     private String userName;
     @NotBlank
-    @Size(min = 6, max = 30, message = "Password length should be between 6 to 30 char ")
+    @Size(min = 6,  message = "Password length should be between 6 to 30 char ")
     private String password;
     private String firstName;
     private String lastName;

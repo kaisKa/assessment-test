@@ -1,7 +1,7 @@
 package io.kais.asses.users;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.Assertions;
+import io.kais.asses.security.UserDetailsServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,12 +10,15 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.given;
 
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
 import java.util.List;
@@ -25,6 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(UserController.class)
+@AutoConfigureMockMvc
 class UserControllerTest {
 
     @Autowired
@@ -35,7 +39,11 @@ class UserControllerTest {
     @MockBean
     private UserService userService;
 
+    @MockBean
+    private UserDetailsServiceImpl userDetailsService;
+
     @Test
+    @WithMockUser(username = "kais", password = "kaiskiki", roles = "USER")
     public void test_getAllUser_should_return_all_users() throws Exception {
 
         User user = new User(0, "kikika", "123456", "kais", "Alkotamy", "male");
@@ -51,12 +59,13 @@ class UserControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "kais", password = "kaiskiki", roles = "USER")
     public void test_getUserById_should_return_all_users() throws Exception {
 
         User user = new User(0, "kikika", "123456", "kais", "Alkotamy", "male");
         given(this.userService.getById(0)).willReturn(user);
 
-        var result = mockMvc.perform(get("/api/users/0"))
+        var result = mockMvc.perform(get("/api/users/0").with(httpBasic("kais","kaiskiki")))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -110,6 +119,7 @@ class UserControllerTest {
 
 
     @Test
+    @WithMockUser(username = "kais", password = "kaiskiki", roles = "USER")
     public void test_deleteUser_should_delete_user() throws Exception {
 
         User user = new User(0, "kikika", "123456", "kais", "Alkotamy", "male");

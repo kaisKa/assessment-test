@@ -1,6 +1,7 @@
 package io.kais.asses.users;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +20,8 @@ public class UserController {
     }
 
     @GetMapping()
+    @Operation(description = "Endpoint to get all users ")
+    @SecurityRequirement(name = "basicAuth")
     public ResponseEntity<List<User>> listAll() {
         var users = this.service.getAll();
         return ResponseEntity.ok().body(users);

@@ -11,11 +11,11 @@ import java.io.InputStream;
 @Component
 public class UsersDownloader implements CommandLineRunner {
     private final ObjectMapper objectMapper;
-    private final UserRepository repository;
+    private final UserService service;
 
-    public UsersDownloader(ObjectMapper objectMapper, UserRepository repository) {
+    public UsersDownloader(ObjectMapper objectMapper, UserService service) {
         this.objectMapper = objectMapper;
-        this.repository = repository;
+        this.service = service;
     }
 
 
@@ -24,7 +24,7 @@ public class UsersDownloader implements CommandLineRunner {
         String usersPath = "/data/users.json";
         try(InputStream inputStream = TypeReference.class.getResourceAsStream(usersPath)){
             var response = objectMapper.readValue(inputStream, users.class);
-            this.repository.saveAll(response.users);
+            this.service.saveAll(response.users);
          }catch (IOException ex){
             ex.printStackTrace();
             throw  new RuntimeException("Failed to read json data");

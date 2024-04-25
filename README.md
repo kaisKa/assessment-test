@@ -44,12 +44,18 @@ To install and run the Spring Boot User Service locally, follow these steps:
 The application will start running on `localhost:8080`.
 
 ## Usage
+### Authentication
+
+The API endpoints are secured with basic authentication. You need to provide valid credentials to access the endpoints. Use the following credentials for testing:
+
+- **Username:** kais
+- **Password:** kaiskiki
 
 Once the application is running, you can perform CRUD operations on users using the following endpoints:
 
-- **Create User**: POST `/api/users`
-- **List All User**: GET `/api/users`
-- **Get User ById**: GET `/api/users/{id}`
+- **Create User**: POST `/api/users` public
+- **List All User**: GET `/api/users` secured
+- **Get User ById**: GET `/api/users/{id}` secured
 - **Update User**: PUT `/api/users/{id}`
 - **Delete User**: DELETE `/api/users/{id}`
 
