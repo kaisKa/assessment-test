@@ -20,7 +20,7 @@ To install and run the Spring Boot User Service locally, follow these steps:
 1. Clone the repository to your local machine:
 
     ```bash
-    git clone <repository-url>
+    git clone https://github.com/kaisKa/assessment-test.git
     ```
 
 2. Navigate to the project directory:
@@ -48,7 +48,8 @@ The application will start running on `localhost:8080`.
 Once the application is running, you can perform CRUD operations on users using the following endpoints:
 
 - **Create User**: POST `/api/users`
-- **Read User**: GET `/api/users/{id}`
+- **List All User**: GET `/api/users`
+- **Get User ById**: GET `/api/users/{id}`
 - **Update User**: PUT `/api/users/{id}`
 - **Delete User**: DELETE `/api/users/{id}`
 
