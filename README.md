@@ -57,6 +57,11 @@ You can access the H2 console to view and manage the in-memory database by navig
 
 The API endpoints are documented using Springdoc OpenAPI. You can access the Swagger UI for interactive API documentation by navigating to `localhost:8080/swagger-ui.html` in your web browser.
 
+## Unit Tests
+
+Unit tests are included for both the controller and service layers to ensure the correctness and reliability of the application. These tests cover various scenarios and edge cases to validate the behavior of the application components.
+
+
 ## Contributing
 
 Contributions are welcome! Feel free to submit pull requests or open issues for any bugs or feature requests.
