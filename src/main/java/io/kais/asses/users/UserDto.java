@@ -20,13 +20,13 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 @Getter
 @Setter
-@Table(name = "users")
-@Entity
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+public class UserDto {
     private Integer id;
+    @UniqueUserNameConstraint
     private String userName;
+    @NotBlank
+    @Size(min = 6,  message = "Password length should be between 6 to 30 char ")
     private String password;
     private String firstName;
     private String lastName;

@@ -10,6 +10,11 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
+/**
+ * This is a controller for the Crud endpoints
+ * some of them are secured just for demo purpose and some are not
+ * apply validation also
+ */
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
@@ -27,23 +32,27 @@ public class UserController {
         return ResponseEntity.ok().body(users);
     }
 
-    @Operation
     @GetMapping("/{id}")
+    @Operation(description = "Endpoint to get a user by it id")
+    @SecurityRequirement(name = "basicAuth")
     public ResponseEntity<User> getById(@PathVariable("id") int id) {
         return ResponseEntity.ok().body(this.service.getById(id));
     }
 
     @PostMapping()
-    public ResponseEntity<User> create(@RequestBody @Valid User user) {
+    @Operation(description = "Endpoint to create a new user")
+    public ResponseEntity<UserDto> create(@RequestBody @Valid UserDto user) {
         return ResponseEntity.created(URI.create("/api/users")).body(this.service.create(user));
     }
 
     @PutMapping()
-    public ResponseEntity<User> update(@RequestBody User user) {
+    @Operation(description = "Endpoint to update existing user and create one in case does not exist")
+    public ResponseEntity<UserDto> update(@RequestBody UserDto user) {
         return ResponseEntity.ok().body(this.service.update(user));
     }
 
     @DeleteMapping("/{id}")
+    @Operation(description = "Endpoint to delete a user from the db")
     public ResponseEntity<String> deleteById(@PathVariable("id") Integer id) {
         this.service.delete(id);
         return new ResponseEntity<>(("User deleted - User ID:" + id), HttpStatus.OK);

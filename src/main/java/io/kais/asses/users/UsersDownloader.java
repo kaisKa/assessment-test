@@ -8,6 +8,9 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.io.InputStream;
 
+/**
+ * This is a loader class to load populate some data upon start up from a json file
+ */
 @Component
 public class UsersDownloader implements CommandLineRunner {
     private final ObjectMapper objectMapper;

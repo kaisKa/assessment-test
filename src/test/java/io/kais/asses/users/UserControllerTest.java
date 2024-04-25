@@ -13,6 +13,8 @@ import static org.mockito.BDDMockito.given;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -27,7 +29,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(SpringExtension.class)
-@WebMvcTest(UserController.class)
+@WebMvcTest(controllers = UserController.class, excludeFilters = {
+        @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE)})
 @AutoConfigureMockMvc
 class UserControllerTest {
 
@@ -53,7 +56,7 @@ class UserControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath ("$", hasSize(1)))
+                .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("$").isArray())
                 .andReturn();
     }
@@ -65,7 +68,7 @@ class UserControllerTest {
         User user = new User(0, "kikika", "123456", "kais", "Alkotamy", "male");
         given(this.userService.getById(0)).willReturn(user);
 
-        var result = mockMvc.perform(get("/api/users/0").with(httpBasic("kais","kaiskiki")))
+        var result = mockMvc.perform(get("/api/users/0").with(httpBasic("kais", "kaiskiki")))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -79,12 +82,13 @@ class UserControllerTest {
     @Test
     public void test_createUser_should_create_user() throws Exception {
 
-        User user = new User(0, "kikika", "123456", "kais", "Alkotamy", "male");
+        UserDto user = new UserDto(0, "kikika", "123456", "kais", "Alkotamy", "male");
         given(this.userService.create(user)).willReturn(user);
 
         var result = mockMvc.perform(post("/api/users/")
-                        .content(objectMapper.writeValueAsString(user))
-                        .contentType(MediaType.APPLICATION_JSON))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(user))
+                        )
                 .andDo(print())
                 .andExpect(status().isCreated())
 //                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -98,7 +102,7 @@ class UserControllerTest {
     @Test
     public void test_updateUser_should_update_user() throws Exception {
 
-        User user = new User(0, "kikika", "123456", "kais", "Alkotamy", "male");
+        UserDto user = new UserDto(0, "kikika", "123456", "kais", "Alkotamy", "male");
         given(this.userService.update(user)).willReturn(user);
 
         var result = mockMvc.perform(put("/api/users/")
@@ -113,9 +117,8 @@ class UserControllerTest {
 //                .andExpect(jsonPath("$.userName", is("kikika")))
 //                .andExpect(jsonPath("$.password").isNotEmpty())
                 .andReturn();
-        System.out.printf("fd");
-    }
 
+    }
 
 
     @Test

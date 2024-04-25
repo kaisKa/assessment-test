@@ -67,12 +67,12 @@ class UserServiceTest {
     @Test
     void test_create_verify_creating_once() {
 
-        User user0 = new User(0, "kikika", "123456", "kais", "Alkotamy", "male");
+        UserDto user0 = new UserDto(0, "kikika", "123456", "kais", "Alkotamy", "male");
         userService.create(user0);
         verify(userService, times(1)).create(user0);
-        ArgumentCaptor<User> orderArgumentCaptor = ArgumentCaptor.forClass(User.class);
+        ArgumentCaptor<UserDto> orderArgumentCaptor = ArgumentCaptor.forClass(UserDto.class);
         verify(userService).create(orderArgumentCaptor.capture());
-        User orderCreated = orderArgumentCaptor.getValue();
+        UserDto orderCreated = orderArgumentCaptor.getValue();
         assertNotNull(orderCreated.getUserName());
         assertEquals("kikika", orderCreated.getUserName());
     }

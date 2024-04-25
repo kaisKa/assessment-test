@@ -1,17 +1,24 @@
 package io.kais.asses.users;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.kais.asses.exceptions.UserNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * This is the service layer in case needed to handle extra logic
+ * right now it is just accessing the data layer and perform encoding to the password once saved
+ */
 @Service
 public class UserService {
     private final UserRepository repository;
+    private final ObjectMapper objectMapper;
 
-    public UserService(UserRepository repository) {
+    public UserService(UserRepository repository, ObjectMapper objectMapper) {
         this.repository = repository;
+        this.objectMapper = objectMapper;
     }
 
 
@@ -34,9 +41,10 @@ public class UserService {
         else return op.get();
     }
 
-    public User update(User user) {
-        User u = this.repository.save(user);
-        return u;
+    public UserDto update(UserDto user) {
+        User updateUser = objectMapper.convertValue(user,User.class);
+        User u = this.repository.save(updateUser);
+        return objectMapper.convertValue(u,UserDto.class);
     }
 
     public Boolean delete(Integer id) {
@@ -46,10 +54,11 @@ public class UserService {
 
     }
 
-    public User create(User user) {
+    public UserDto create(UserDto user) {
+        User createUser = objectMapper.convertValue(user, User.class);
         String encodedPassword = new BCryptPasswordEncoder().encode(user.getPassword());
         user.setPassword(encodedPassword);
-        return this.repository.save(user);
+        return  objectMapper.convertValue( this.repository.save(createUser) , UserDto.class);
     }
 
     public List<User> saveAll(List<User> users) {
